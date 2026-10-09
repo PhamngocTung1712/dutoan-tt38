@@ -391,8 +391,8 @@ HTML_PAGE = """
                         <div class="col-md-4">
                             <div class="border rounded p-3 h-100 bg-white">
                                 <h5 class="text-primary"><i class="fa-solid fa-file-word me-2"></i>Báo Cáo Thẩm Tra (.docx)</h5>
-                                <p class="text-muted small">Soạn thảo theo tiêu chuẩn Nghị định 10/2021/NĐ-CP và Thông tư 38/2026/TT-BXD, đầy đủ 4 mục thẩm tra 5.1, 5.2, 5.3, 5.4.</p>
-                                <button onclick="downloadReport('word')" class="btn btn-outline-primary w-100"><i class="fa-solid fa-download me-1"></i>Tải Báo Cáo Word</button>
+                                <p class="text-muted small">Soạn thảo chuẩn Mẫu số 05 Phụ lục VIII Thông tư số 36/2026/TT-BXD và Nghị định số 206/2026/NĐ-CP, đầy đủ 7 nội dung thẩm tra quy định.</p>
+                                <button onclick="downloadReport('word')" class="btn btn-outline-primary w-100"><i class="fa-solid fa-download me-1"></i>Tải Báo Cáo Word (Mẫu 05 TT36)</button>
                             </div>
                         </div>
                         <div class="col-md-4">

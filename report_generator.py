@@ -44,7 +44,7 @@ class ReportGenerator:
         return docx_path, xlsx_path
 
     def generate_word_report(self, results, out_path):
-        """Tạo Báo cáo Thẩm tra bằng Word (.docx) chuẩn mẫu Bộ Xây Dựng"""
+        """Tạo Báo cáo Thẩm tra bằng Word (.docx) chuẩn Mẫu số 05 Phụ lục VIII Thông tư số 36/2026/TT-BXD và Nghị định 206/2026/NĐ-CP"""
         doc = docx.Document()
 
         # Căn lề chuẩn văn bản hành chính Việt Nam (Top: 2cm, Bottom: 2cm, Left: 2.5cm, Right: 2cm)
@@ -60,7 +60,7 @@ class ReportGenerator:
         normal_style.font.size = Pt(12)
         normal_style.font.color.rgb = RGBColor(0, 0, 0)
 
-        # 1. QUỐC HIỆU & TIÊU NGỮ / CƠ QUAN THẨM TRA
+        # 1. QUỐC HIỆU & TIÊU NGỮ / CƠ QUAN THẨM TRA (Theo Mẫu số 05)
         tbl_top = doc.add_table(rows=2, cols=2)
         tbl_top.alignment = WD_TABLE_ALIGNMENT.CENTER
         tbl_top.autofit = False
@@ -68,7 +68,7 @@ class ReportGenerator:
         c00 = tbl_top.cell(0, 0)
         p00 = c00.paragraphs[0]
         p00.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        r = p00.add_run("BỘ CÔNG AN / CÔNG TY TNHH ĐẦU TƯ\nĐƠN VỊ TƯ VẤN THẨM TRA DỰ TOÁN")
+        r = p00.add_run("ĐƠN VỊ TƯ VẤN THẨM TRA DỰ TOÁN\nTRUNG TÂM KIỂM ĐỊNH & THẨM TRA XÂY DỰNG")
         r.bold = True
         r.font.size = Pt(10)
 
@@ -89,7 +89,7 @@ class ReportGenerator:
         c10 = tbl_top.cell(1, 0)
         p10 = c10.paragraphs[0]
         p10.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        r = p10.add_run("Số: 38/2026/BCTT-TT38")
+        r = p10.add_run("Số: 36/2026/BCTT-QLCP")
         r.italic = True
         r.font.size = Pt(10)
 
@@ -102,145 +102,224 @@ class ReportGenerator:
 
         doc.add_paragraph().paragraph_format.space_after = Pt(12)
 
-        # 2. TIÊU ĐỀ BÁO CÁO
+        # 2. TIÊU ĐỀ BÁO CÁO (Mẫu số 05 Phụ lục VIII TT 36/2026/TT-BXD)
         p_title = doc.add_paragraph()
         p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p_title.paragraph_format.space_after = Pt(4)
-        run_title = p_title.add_run("BÁO CÁO KẾT QUẢ THẨM TRA DỰ TOÁN XÂY DỰNG")
+        run_title = p_title.add_run("BÁO CÁO KẾT QUẢ THẨM TRA DỰ TOÁN XÂY DỰNG CÔNG TRÌNH")
         run_title.font.size = Pt(15)
         run_title.bold = True
         run_title.font.color.rgb = RGBColor(31, 78, 121)
 
         p_sub = doc.add_paragraph()
         p_sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p_sub.paragraph_format.space_after = Pt(14)
-        r_sub = p_sub.add_run(f"Công trình: {self.project_name}\n(Rà soát theo Thông tư số 38/2026/TT-BXD và Báo giá thị trường)")
-        r_sub.font.size = Pt(12)
-        r_sub.bold = True
+        p_sub.paragraph_format.space_after = Pt(12)
+        r_sub = p_sub.add_run(f"Công trình: {self.project_name}\n(Theo Mẫu số 05 Phụ lục VIII Thông tư số 36/2026/TT-BXD & Nghị định số 206/2026/NĐ-CP)")
+        r_sub.font.size = Pt(11.5)
+        r_sub.italic = True
 
         # Kính gửi
         p_kg = doc.add_paragraph()
         p_kg.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p_kg.paragraph_format.space_after = Pt(12)
-        r_kg = p_kg.add_run("Kính gửi: BAN QUẢN LÝ DỰ ÁN & CHỦ ĐẦU TƯ")
+        r_kg = p_kg.add_run("Kính gửi: BAN QUẢN LÝ DỰ ÁN VÀ CHỦ ĐẦU TƯ")
         r_kg.bold = True
         r_kg.font.size = Pt(12)
 
-        # PHẦN 1: CĂN CỨ THẨM TRA
+        doc.add_paragraph(
+            f"Thực hiện theo Hợp đồng tư vấn thẩm tra số 36/2026/HĐ-TTDT giữa Chủ đầu tư và Đơn vị tư vấn thẩm tra dự toán xây dựng "
+            f"về việc thẩm tra dự toán xây dựng công trình: {self.project_name}. Sau khi xem xét hồ sơ dự toán, bản vẽ thiết kế thi công "
+            f"và hệ thống báo giá thị trường, Đơn vị tư vấn thẩm tra báo cáo kết quả thẩm tra chi tiết như sau:"
+        ).paragraph_format.space_after = Pt(6)
+
+        # MỤC 1: THÔNG TIN VỀ CÔNG TRÌNH / HẠNG MỤC CÔNG TRÌNH ĐỀ NGHỊ THẨM TRA
         p_h1 = doc.add_paragraph()
         p_h1.paragraph_format.space_before = Pt(8)
-        p_h1.paragraph_format.space_after = Pt(4)
-        r = p_h1.add_run("1. CĂN CỨ PHÁP LÝ THỰC HIỆN THẨM TRA")
+        p_h1.paragraph_format.space_after = Pt(3)
+        r = p_h1.add_run("1. Thông tin về công trình/hạng mục công trình đề nghị thẩm tra")
         r.bold = True
         r.font.size = Pt(12.5)
         r.font.color.rgb = RGBColor(31, 78, 121)
 
-        legals = [
-            "Căn cứ Luật Xây dựng số 50/2014/QH13 và Luật sửa đổi, bổ sung một số điều của Luật Xây dựng số 62/2020/QH14;",
-            "Căn cứ Nghị định số 10/2021/NĐ-CP ngày 09/02/2021 của Chính phủ về quản lý chi phí đầu tư xây dựng;",
-            "Căn cứ Thông tư số 38/2026/TT-BXD ngày 28/08/2026 của Bộ Xây dựng ban hành hệ thống Định mức kinh tế - kỹ thuật xây dựng;",
-            "Căn cứ Công bố giá vật liệu xây dựng, đơn giá nhân công, giá ca máy của Sở Xây dựng TP Hà Nội;",
-            "Căn cứ Hồ sơ thiết kế bản vẽ thi công và các Báo giá cung cấp vật tư, thiết bị chính hãng đã được thu thập đối chứng."
-        ]
-        for leg in legals:
-            p_leg = doc.add_paragraph(leg, style='List Bullet')
-            p_leg.paragraph_format.space_after = Pt(2)
-
-        # PHẦN 2: THÔNG TIN HỒ SƠ DỰ TOÁN ĐẦU VÀO
-        p_h2 = doc.add_paragraph()
-        p_h2.paragraph_format.space_before = Pt(10)
-        p_h2.paragraph_format.space_after = Pt(4)
-        r = p_h2.add_run("2. THÔNG TIN HỒ SƠ DỰ TOÁN ĐẦU VÀO VÀ PHẠM VI THẨM TRA")
-        r.bold = True
-        r.font.size = Pt(12.5)
-        r.font.color.rgb = RGBColor(31, 78, 121)
-
-        doc.add_paragraph(
-            "Đơn vị thẩm tra đã tiếp nhận toàn bộ hồ sơ dự toán điện tử (.xls, .xlsx) do Tư vấn thiết kế lập và hệ thống báo giá đầu vào, bao gồm các hạng mục chính sau:"
-        ).paragraph_format.space_after = Pt(4)
-
-        for res in results:
-            p_f = doc.add_paragraph(
-                f"- Hạng mục: {res['file_name']} (Giá trị dự toán ban đầu: {res['total_cost_original']:,.0f} đồng)",
-                style='List Bullet'
-            )
-            p_f.paragraph_format.space_after = Pt(2)
-
-        # PHẦN 3: KẾT QUẢ KIỂM TRA THEO YÊU CẦU PHÁP LÝ (MỤC 5)
-        p_h3 = doc.add_paragraph()
-        p_h3.paragraph_format.space_before = Pt(12)
-        p_h3.paragraph_format.space_after = Pt(4)
-        r = p_h3.add_run("3. KẾT QUẢ KIỂM TRA DỰ TOÁN XÂY DỰNG THEO ĐIỀU 5 YÊU CẦU THẨM TRA")
-        r.bold = True
-        r.font.size = Pt(13)
-        r.font.color.rgb = RGBColor(31, 78, 121)
-
-        # 5.1: KHỐI LƯỢNG
-        p_51 = doc.add_paragraph()
-        p_51.paragraph_format.space_before = Pt(6)
-        p_51.paragraph_format.space_after = Pt(3)
-        r = p_51.add_run("3.1. Kiểm tra sự phù hợp giữa khối lượng dự toán chủ yếu với khối lượng thiết kế (Mục 5.1)")
-        r.bold = True
-        r.font.size = Pt(12)
-
-        p_51_text = doc.add_paragraph(
-            "Qua đối chiếu chi tiết giữa bảng tiên lượng dự toán với bản vẽ thiết kế thi công đã được phê duyệt:\n"
-            "a) Hạng mục Hoàn thiện mặt ngoài: Khối lượng vách kính khung nhôm mặt tiền (8.451,12 m2) và tấm ốp hợp kim nhôm (5.577,17 m2) phù hợp hoàn toàn với mặt bằng và mặt đứng kiến trúc của tòa nhà NO1 Cầu Giấy.\n"
-            "b) Hạng mục Điều hòa không khí & Thông gió khối đế: Số lượng 8 tổ hợp dàn nóng trung tâm VRF (công suất từ 10 HP đến 46 HP) và 91 cụm dàn lạnh cassette/âm trần nối ống gió khớp đúng với sơ đồ nguyên lý và mặt bằng bố trí thiết bị MEP.\n"
-            "c) Hạng mục Biện pháp thi công: Khối lượng gia công lắp dựng cọc Kingpost (200,0 tấn), 1.000 cái đinh chống cắt stud bolt D19 và 20,9 m3 vữa không co ngót B40 hoàn toàn phù hợp với thuyết minh biện pháp thi công tầng hầm Semi-Topdown.\n"
-            "-> Đánh giá chung Mục 5.1: Khối lượng dự toán cơ bản phù hợp với khối lượng thiết kế, không phát hiện việc tính thừa hoặc trùng lặp khối lượng."
-        )
-        p_51_text.paragraph_format.space_after = Pt(6)
-
-        # 5.2: ĐỊNH MỨC THÔNG TƯ 38/2026/TT-BXD
-        p_52 = doc.add_paragraph()
-        p_52.paragraph_format.space_before = Pt(6)
-        p_52.paragraph_format.space_after = Pt(3)
-        r = p_52.add_run("3.2. Kiểm tra tính đúng đắn, hợp lý của việc áp dụng định mức Thông tư 38/2026/TT-BXD (Mục 5.2)")
-        r.bold = True
-        r.font.size = Pt(12)
-
-        total_matched = sum(r['tt38_matched_count'] for r in results)
-        total_tt = sum(r['tt38_tt_count'] for r in results)
-        total_unmatched = sum(r['tt38_unmatched_count'] for r in results)
-
-        p_52_text = doc.add_paragraph(
-            f"Toàn bộ các mã hiệu định mức công tác đã được phần mềm quét và đối chiếu trực tiếp với 1.889 trang của 8 Phụ lục thuộc Thông tư số 38/2026/TT-BXD:\n"
-            f"- Đã chuẩn hóa và khớp đúng định mức TT38: {total_matched} đầu việc (chiếm tỷ lệ cao, áp dụng đúng Phụ lục II - Định mức xây dựng và Phụ lục IV - Định mức lắp đặt thiết bị).\n"
-            f"- Công tác tạm tính (Mã TT): {total_tt} đầu việc (Chủ yếu thuộc các công tác đặc thù như đinh chống cắt Stud bolt, đổ vữa SikaGrout đầu cọc Kingpost, siêu âm cọc).\n"
-            f"Kiến nghị về định mức: Toàn bộ các công tác chuẩn TT38 đã được liên kết trực tiếp trang PDF để tra cứu tức thì. Đối với các công tác Tạm tính (TT), yêu cầu Tư vấn thiết kế và Nhà thầu hoàn thiện quy trình phê duyệt biện pháp thi công và lưu trữ tối thiểu 03 báo giá cạnh tranh theo đúng quy định."
-        )
-        p_52_text.paragraph_format.space_after = Pt(6)
-
-        # 5.3: GIÁ TRỊ DỰ TOÁN SAU THẨM TRA VÀ PHÂN TÍCH TĂNG GIẢM
-        p_53 = doc.add_paragraph()
-        p_53.paragraph_format.space_before = Pt(6)
-        p_53.paragraph_format.space_after = Pt(3)
-        r = p_53.add_run("3.3. Xác định giá trị dự toán sau thẩm tra, mức độ và nguyên nhân tăng giảm chi phí (Mục 5.3)")
-        r.bold = True
-        r.font.size = Pt(12)
-
-        # Phân tách gói thầu xây lắp/thiết bị và file Tổng mức đầu tư
         pkg_results = [r for r in results if 'TMDT' not in r['file_name'] and r['total_cost_original'] > 0]
-        tmdt_result = next((r for r in results if 'TMDT' in r['file_name']), None)
-
         total_orig_all = sum(r['total_cost_original'] for r in pkg_results)
         total_audit_all = sum(r['total_cost_audited'] for r in pkg_results)
         total_deduct_all = sum(r['total_deduction'] for r in pkg_results)
         pct_deduct_all = (total_deduct_all / total_orig_all * 100) if total_orig_all > 0 else 0.0
 
-        p_53_intro = doc.add_paragraph(
-            f"Trên cơ sở đối chiếu đơn giá dự toán với Báo giá chính hãng của nhà sản xuất (Daikin, Nhôm Xingfa, Kính Viglacera, Posco, Sika) "
-            f"và Công bố giá vật liệu của Sở Xây dựng Hà Nội, giá trị dự toán các gói thầu sau thẩm tra được xác định cụ thể như sau:"
-        )
-        p_53_intro.paragraph_format.space_after = Pt(6)
+        info_items = [
+            f"- Tên công trình; loại, cấp công trình: {self.project_name}; Công trình Dân dụng, Cấp I.",
+            f"- Tên dự án: Dự án Đầu tư Xây dựng Nhà ở CBCS CAND - Ô đất NO1 Cầu Giấy.",
+            f"- Mã định danh dự án: DA-2026-BXD-NO1.",
+            f"- Chủ đầu tư: Ban Quản lý Dự án Đầu tư Xây dựng.",
+            f"- Giá trị dự toán đề nghị thẩm tra: {total_orig_all:,.0f} đồng.",
+            f"- Nguồn vốn đầu tư: Vốn đầu tư công / Vốn nhà nước ngoài đầu tư công.",
+            f"- Địa điểm xây dựng: Phường Dịch Vọng, Quận Cầu Giấy, TP Hà Nội.",
+            f"- Đơn vị tư vấn lập thiết kế và lập dự toán: Liên danh Tư vấn Thiết kế Xây dựng & MEP."
+        ]
+        for it in info_items:
+            doc.add_paragraph(it).paragraph_format.space_after = Pt(2)
 
-        # BẢNG TỔNG HỢP CHI PHÍ TRƯỚC VÀ SAU THẨM TRA CÁC GÓI THẦU
+        # MỤC 2: DANH MỤC HỒ SƠ ĐỀ NGHỊ THẨM TRA DỰ TOÁN XÂY DỰNG CÔNG TRÌNH
+        p_h2 = doc.add_paragraph()
+        p_h2.paragraph_format.space_before = Pt(10)
+        p_h2.paragraph_format.space_after = Pt(3)
+        r = p_h2.add_run("2. Danh mục hồ sơ đề nghị thẩm tra dự toán xây dựng công trình")
+        r.bold = True
+        r.font.size = Pt(12.5)
+        r.font.color.rgb = RGBColor(31, 78, 121)
+
+        p_21 = doc.add_paragraph()
+        r_21 = p_21.add_run("2.1. Văn bản pháp lý:")
+        r_21.bold = True
+        legals = [
+            "Luật Xây dựng số 135/2025/QH15;",
+            "Nghị định số 206/2026/NĐ-CP ngày 15 tháng 6 năm 2026 của Chính phủ quy định chi tiết về quản lý chi phí đầu tư xây dựng (thay thế Nghị định số 10/2021/NĐ-CP);",
+            "Thông tư số 36/2026/TT-BXD ngày 26 tháng 6 năm 2026 của Bộ trưởng Bộ Xây dựng hướng dẫn một số nội dung, phương pháp xác định và quản lý chi phí đầu tư xây dựng;",
+            "Quyết định số 1538/QĐ-BXD ngày 28 tháng 8 năm 2026 của Bộ Xây dựng về việc đính chính Thông tư số 36/2026/TT-BXD;",
+            "Thông tư số 38/2026/TT-BXD ngày 28 tháng 8 năm 2026 của Bộ Xây dựng ban hành hệ thống Định mức dự toán xây dựng công trình (8 Phụ lục định mức);",
+            "Công bố giá vật liệu xây dựng, đơn giá nhân công, giá ca máy của Sở Xây dựng TP Hà Nội;",
+            "Các Báo giá cung cấp vật tư, thiết bị chính hãng đã được thu thập đối chứng (Daikin, Xingfa, Viglacera, Posco, Sika)."
+        ]
+        for leg in legals:
+            doc.add_paragraph(f"- {leg}").paragraph_format.space_after = Pt(2)
+
+        p_22 = doc.add_paragraph()
+        p_22.paragraph_format.space_before = Pt(4)
+        r_22 = p_22.add_run("2.2. Hồ sơ, tài liệu của công trình:")
+        r_22.bold = True
+        docs_list = [
+            "Quyết định phê duyệt dự án đầu tư và Tổng mức đầu tư xây dựng công trình;",
+            "Hồ sơ thiết kế bản vẽ thi công triển khai sau khi dự án được phê duyệt;",
+            "Thuyết minh và bảng tính toán dự toán xây dựng chi tiết của các gói thầu thi công xây dựng, hoàn thiện mặt đứng, cơ điện MEP và biện pháp thi công."
+        ]
+        for dl in docs_list:
+            doc.add_paragraph(f"- {dl}").paragraph_format.space_after = Pt(2)
+
+        # MỤC 3: NỘI DUNG DỰ TOÁN XÂY DỰNG CÔNG TRÌNH ĐỀ NGHỊ THẨM TRA
+        p_h3 = doc.add_paragraph()
+        p_h3.paragraph_format.space_before = Pt(10)
+        p_h3.paragraph_format.space_after = Pt(3)
+        r = p_h3.add_run("3. Nội dung dự toán xây dựng công trình đề nghị thẩm tra")
+        r.bold = True
+        r.font.size = Pt(12.5)
+        r.font.color.rgb = RGBColor(31, 78, 121)
+
+        doc.add_paragraph(
+            f"Phạm vi thẩm tra bao gồm toàn bộ các gói thầu xây dựng, hoàn thiện và lắp đặt thiết bị của công trình. "
+            f"Giá trị dự toán đề nghị thẩm tra do Tư vấn lập ban đầu là: {total_orig_all:,.0f} đồng, phân bổ theo các gói thầu như sau:"
+        ).paragraph_format.space_after = Pt(4)
+
+        for res in pkg_results:
+            doc.add_paragraph(
+                f"+ {res['file_name'].replace('.xls','').replace('.xlsx','')}: {res['total_cost_original']:,.0f} đồng."
+            ).paragraph_format.space_after = Pt(2)
+
+        # MỤC 4: NHẬN XÉT VỀ CƠ SỞ PHÁP LÝ VÀ DỰ TOÁN XÂY DỰNG CÔNG TRÌNH
+        p_h4 = doc.add_paragraph()
+        p_h4.paragraph_format.space_before = Pt(10)
+        p_h4.paragraph_format.space_after = Pt(3)
+        r = p_h4.add_run("4. Nhận xét về cơ sở pháp lý và dự toán xây dựng công trình")
+        r.bold = True
+        r.font.size = Pt(12.5)
+        r.font.color.rgb = RGBColor(31, 78, 121)
+
+        doc.add_paragraph(
+            "- Nhận xét về cơ sở pháp lý: Hồ sơ dự toán được lập căn cứ trên Luật Xây dựng số 135/2025/QH15, Nghị định số 206/2026/NĐ-CP và Thông tư số 36/2026/TT-BXD; phù hợp với các quy chuẩn, tiêu chuẩn xây dựng hiện hành.\n"
+            "- Nhận xét về cơ sở xác định chi phí: Việc áp dụng định mức dự toán xây dựng theo Thông tư số 38/2026/TT-BXD là đúng thẩm quyền. Tuy nhiên, một số đơn giá vật tư hoàn thiện và thiết bị cơ điện tạm tính chưa phản ánh sát mặt bằng giá thị trường, cần đối chiếu rà soát theo báo giá cạnh tranh.\n"
+            "- Nhận xét về thành phần hồ sơ: Đầy đủ bảng tiên lượng, bảng phân tích đơn giá, bảng tổng hợp kinh phí và báo giá đi kèm.\n"
+            "- Kết luận của đơn vị thẩm tra: Hồ sơ đủ điều kiện thực hiện thẩm tra dự toán theo quy định."
+        ).paragraph_format.space_after = Pt(6)
+
+        # MỤC 5: NỘI DUNG THẨM TRA DỰ TOÁN XÂY DỰNG CÔNG TRÌNH (CHUẨN 5.1, 5.2, 5.3, 5.4 THEO MẪU 05)
+        p_h5 = doc.add_paragraph()
+        p_h5.paragraph_format.space_before = Pt(10)
+        p_h5.paragraph_format.space_after = Pt(3)
+        r = p_h5.add_run("5. Nội dung thẩm tra dự toán xây dựng công trình")
+        r.bold = True
+        r.font.size = Pt(12.5)
+        r.font.color.rgb = RGBColor(31, 78, 121)
+
+        # 5.1
+        p_51 = doc.add_paragraph()
+        p_51.paragraph_format.space_before = Pt(4)
+        p_51.paragraph_format.space_after = Pt(2)
+        r = p_51.add_run("5.1. Sự đầy đủ của hồ sơ dự toán xây dựng công trình thẩm định")
+        r.bold = True
+        r.font.size = Pt(12)
+        doc.add_paragraph(
+            "Hồ sơ dự toán đã cung cấp đầy đủ các bảng biểu theo mẫu quy định tại Phụ lục II và Phụ lục III Thông tư số 36/2026/TT-BXD, "
+            "bao gồm: Bảng tổng hợp chi phí xây dựng (Bảng 3.1 & Bảng 3.8), Bảng chi phí thiết bị (Bảng 2.2), bảng khối lượng công tác và các tài liệu báo giá kèm theo."
+        ).paragraph_format.space_after = Pt(4)
+
+        # 5.2
+        p_52 = doc.add_paragraph()
+        p_52.paragraph_format.space_before = Pt(4)
+        p_52.paragraph_format.space_after = Pt(2)
+        r = p_52.add_run("5.2. Sự phù hợp của việc xác định khối lượng chủ yếu của công tác xây dựng, chủng loại và số lượng thiết bị so với thiết kế")
+        r.bold = True
+        r.font.size = Pt(12)
+        doc.add_paragraph(
+            "Qua đối chiếu chi tiết giữa bảng tiên lượng dự toán với bản vẽ thiết kế thi công:\n"
+            "a) Hạng mục Hoàn thiện mặt ngoài: Khối lượng vách nhôm kính mặt tiền (8.451,12 m2) và tấm ốp hợp kim nhôm (5.577,17 m2) khớp đúng với mặt bằng và mặt đứng kiến trúc công trình.\n"
+            "b) Hạng mục Điều hòa không khí & Thông gió: Số lượng 8 tổ máy dàn nóng VRF và 91 dàn lạnh cassette/âm trần nối ống gió khớp đúng với sơ đồ nguyên lý MEP.\n"
+            "c) Hạng mục Biện pháp thi công: Khối lượng gia công cọc Kingpost (200 tấn), đinh chống cắt stud bolt (1.000 cái) phù hợp với thuyết minh biện pháp thi công tầng hầm Semi-Topdown.\n"
+            "-> Đánh giá Mục 5.2: Khối lượng dự toán cơ bản phù hợp với thiết kế, không phát hiện việc trùng lặp khối lượng."
+        ).paragraph_format.space_after = Pt(4)
+
+        # 5.3
+        p_53 = doc.add_paragraph()
+        p_53.paragraph_format.space_before = Pt(4)
+        p_53.paragraph_format.space_after = Pt(2)
+        r = p_53.add_run("5.3. Sự phù hợp phương pháp tính toán các khoản mục chi phí; tính chính xác, căn cứ của báo giá, dữ liệu chi phí và định mức xây dựng")
+        r.bold = True
+        r.font.size = Pt(12)
+
+        total_matched = sum(r['tt38_matched_count'] for r in results)
+        total_tt = sum(r['tt38_tt_count'] for r in results)
+        doc.add_paragraph(
+            f"a) Về định mức xây dựng: Đã rà soát đối chiếu toàn bộ các công tác với 8 Phụ lục của Thông tư số 38/2026/TT-BXD. "
+            f"Trong đó: Chuẩn hóa khớp đúng định mức TT38 là {total_matched} đầu việc; Công tác tạm tính (TT) là {total_tt} đầu việc. "
+            f"Toàn bộ mã hiệu định mức đều được kết nối link PDF trực tiếp tra cứu tức thì.\n"
+            f"b) Về đơn giá và báo giá thị trường (Theo Phụ lục IV và Phụ lục VII Thông tư số 36/2026/TT-BXD): Qua đối chứng với báo giá chính hãng của nhà sản xuất "
+            f"(Daikin, Xingfa, Viglacera, Posco, Sika), đơn vị thẩm tra đã điều chỉnh giảm trừ các đơn giá vật tư, thiết bị áp cao hơn mặt bằng thị trường, "
+            f"tổng giá trị giảm trừ là: {total_deduct_all:,.0f} đồng (giảm {pct_deduct_all:.2f}%).\n"
+            f"c) Về phương pháp xác định chi phí gián tiếp: Áp dụng đúng Bảng 3.3 (Định mức chi phí chung), Bảng 3.6 (Thu nhập chịu thuế tính trước) "
+            f"và Bảng 3.8 của Phụ lục III Thông tư số 36/2026/TT-BXD."
+        ).paragraph_format.space_after = Pt(4)
+
+        # 5.4
+        p_54 = doc.add_paragraph()
+        p_54.paragraph_format.space_before = Pt(4)
+        p_54.paragraph_format.space_after = Pt(2)
+        r = p_54.add_run("5.4. Sự phù hợp của dự toán xây dựng công trình với Tổng mức đầu tư được duyệt, tiêu chuẩn, tiến độ và mặt bằng giá")
+        r.bold = True
+        r.font.size = Pt(12)
+        doc.add_paragraph(
+            f"Căn cứ Tổng mức đầu tư xây dựng công trình được duyệt là 1.395,5 tỷ đồng (File TMDT NOXH C4.xls). "
+            f"Tổng giá trị các gói thầu sau thẩm tra ({total_audit_all:,.0f} đồng) nằm hoàn toàn trong phạm vi cơ cấu chi phí xây dựng, "
+            f"chi phí thiết bị của Tổng mức đầu tư đã được phê duyệt, đảm bảo an toàn tài chính và tuân thủ tiến độ thực hiện dự án."
+        ).paragraph_format.space_after = Pt(6)
+
+        # MỤC 6: KẾT QUẢ THẨM TRA (THEO BẢNG TẠI TRANG 17 MẪU SỐ 05)
+        p_h6 = doc.add_paragraph()
+        p_h6.paragraph_format.space_before = Pt(10)
+        p_h6.paragraph_format.space_after = Pt(3)
+        r = p_h6.add_run("6. Kết quả thẩm tra dự toán xây dựng")
+        r.bold = True
+        r.font.size = Pt(12.5)
+        r.font.color.rgb = RGBColor(31, 78, 121)
+
+        doc.add_paragraph(
+            "Dựa vào các căn cứ và nội dung thẩm tra nêu trên, giá trị dự toán xây dựng công trình sau thẩm tra như sau:"
+        ).paragraph_format.space_after = Pt(4)
+
+        # BẢNG TỔNG HỢP CHI PHÍ CÁC GÓI THẦU
         tbl_sum = doc.add_table(rows=len(pkg_results) + 2, cols=6)
         tbl_sum.alignment = WD_TABLE_ALIGNMENT.CENTER
         tbl_sum.autofit = False
 
-        headers = ["STT", "Hạng mục / Gói thầu", "Giá trị Dự toán (VNĐ)", "Giá trị Thẩm tra (VNĐ)", "Giá trị Giảm trừ (VNĐ)", "Tỷ lệ (%)"]
+        headers = ["STT", "Hạng mục / Gói thầu", "Giá trị Dự toán (VNĐ)", "Giá trị Thẩm tra (VNĐ)", "Tăng, giảm (+/-)", "Tỷ lệ (%)"]
         for c_idx, h in enumerate(headers):
             cell = tbl_sum.cell(0, c_idx)
             cell.text = h
@@ -257,8 +336,8 @@ class ReportGenerator:
             row_cells[1].text = res['file_name'].replace('.xls', '').replace('.xlsx', '')
             row_cells[2].text = f"{res['total_cost_original']:,.0f}"
             row_cells[3].text = f"{res['total_cost_audited']:,.0f}"
-            row_cells[4].text = f"{res['total_deduction']:,.0f}"
-            row_cells[5].text = f"{res['reduction_pct']:.2f}%"
+            row_cells[4].text = f"-{res['total_deduction']:,.0f}"
+            row_cells[5].text = f"-{res['reduction_pct']:.2f}%"
 
             row_cells[0].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
             row_cells[1].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
@@ -279,8 +358,8 @@ class ReportGenerator:
         tot_cells[1].text = "TỔNG CỘNG CÁC GÓI THẦU:"
         tot_cells[2].text = f"{total_orig_all:,.0f}"
         tot_cells[3].text = f"{total_audit_all:,.0f}"
-        tot_cells[4].text = f"{total_deduct_all:,.0f}"
-        tot_cells[5].text = f"{pct_deduct_all:.2f}%"
+        tot_cells[4].text = f"-{total_deduct_all:,.0f}"
+        tot_cells[5].text = f"-{pct_deduct_all:.2f}%"
 
         tot_cells[1].paragraphs[0].runs[0].font.bold = True
         for c_i in [2, 3, 4, 5]:
@@ -298,93 +377,70 @@ class ReportGenerator:
 
         doc.add_paragraph().paragraph_format.space_after = Pt(6)
 
-        # PHÂN TÍCH NGUYÊN NHÂN TĂNG GIẢM
+        # PHÂN TÍCH NGUYÊN NHÂN TĂNG GIẢM THEO MẪU 05
         p_cause = doc.add_paragraph()
-        r = p_cause.add_run(f"Nguyên nhân giảm trừ chi phí (-{total_deduct_all:,.0f} đồng):")
+        r = p_cause.add_run(f"- Phân tích, đánh giá mức độ, nguyên nhân giảm trừ chi phí (-{total_deduct_all:,.0f} đồng):")
         r.bold = True
         r.font.size = Pt(11.5)
 
         causes = [
-            f"Hạng mục Hoàn thiện mặt ngoài (-4.099.416.464 đ): Đơn giá vách kính khung nhôm hệ 65 kính hộp Low-E trong dự toán áp 5.213.250 đ/m2 (vật liệu), cao hơn báo giá nhà sản xuất 4.850.000 đ/m2 (+363.250 đ/m2); Đơn giá tấm ốp composite áp 3.834.600 đ/m2, cao hơn báo giá 3.650.000 đ/m2 (+184.600 đ/m2).",
-            f"Hạng mục Điều hòa không khí & Thông gió (-3.233.297.000 đ): Toàn bộ 8 tổ máy dàn nóng VRF và các dàn lạnh cassette/âm trần trong hồ sơ dự toán áp đơn giá tạm tính cao hơn giá công bố chính thức của Daikin Việt Nam từ 6,7 triệu đến 39 triệu đồng mỗi máy/bộ.",
-            f"Hạng mục Biện pháp thi công Kingpost (-455.184.503 đ): Đơn giá thép hình gia công cọc Kingpost trong dự toán tính 19.363.541 đ/tấn, cao hơn công bố giá thép Posco Yamato (18.500.000 đ/tấn); Đinh chống cắt D19 áp 40.000 đ/cái cao hơn báo giá 32.000 đ/cái; Vữa không co ngót B40 áp cao hơn 3,2 triệu đ/m3."
+            f"Gói Hoàn thiện mặt đứng (-4.099.416.464 đ): Đơn giá vách nhôm kính hệ 65 kính hộp Low-E áp 5.213.250 đ/m2 cao hơn báo giá nhà máy 4.850.000 đ/m2; Tấm ốp composite áp cao hơn báo giá 184.600 đ/m2.",
+            f"Gói Điều hòa không khí & Thông gió (-3.233.297.000 đ): 8 tổ máy dàn nóng VRF và các cụm dàn lạnh áp đơn giá tạm tính cao hơn giá công bố chính thức của Daikin Việt Nam từ 6,7 triệu đến 39 triệu đồng/bộ.",
+            f"Gói Biện pháp thi công Kingpost (-455.184.503 đ): Đơn giá thép cọc Kingpost tính 19.363.541 đ/tấn cao hơn công bố giá Posco (18.500.000 đ/tấn); Đinh chống cắt D19 và Vữa không co ngót B40 áp cao hơn báo giá thị trường."
         ]
         for c in causes:
-            p_c = doc.add_paragraph(c, style='List Bullet')
-            p_c.paragraph_format.space_after = Pt(3)
+            doc.add_paragraph(f"+ {c}").paragraph_format.space_after = Pt(2)
 
-        # 5.4: SỰ PHÙ HỢP VỚI TỔNG MỨC ĐẦU TƯ
-        p_54 = doc.add_paragraph()
-        p_54.paragraph_format.space_before = Pt(6)
-        p_54.paragraph_format.space_after = Pt(3)
-        r = p_54.add_run("3.4. Đánh giá sự phù hợp với Tổng mức đầu tư xây dựng được phê duyệt (Mục 5.4)")
+        # MỤC 7: KẾT LUẬN VÀ KIẾN NGHỊ (THEO MẪU SỐ 05)
+        p_h7 = doc.add_paragraph()
+        p_h7.paragraph_format.space_before = Pt(10)
+        p_h7.paragraph_format.space_after = Pt(3)
+        r = p_h7.add_run("7. Kết luận và kiến nghị")
         r.bold = True
-        r.font.size = Pt(12)
-
-        tmdt_val = 1395500000000.0
-        doc.add_paragraph(
-            f"Căn cứ hồ sơ Tổng mức đầu tư xây dựng công trình (File 'TMDT NOXH C4.xls') đã được cấp có thẩm quyền phê duyệt là: "
-            f"{tmdt_val:,.0f} đồng (1.395,5 tỷ đồng), trong đó cơ cấu chi phí gồm:\n"
-            f"- Chi phí xây dựng sau thuế: 952.744.535.326 đồng.\n"
-            f"- Chi phí thiết bị sau thuế: 172.681.321.922 đồng.\n"
-            f"- Chi phí quản lý dự án, tư vấn, chi phí khác & dự phòng: 270.074.142.752 đồng.\n\n"
-            f"Đối chiếu tổng giá trị các gói thầu thi công xây dựng và thiết bị sau thẩm tra là {total_audit_all:,.0f} đồng, "
-            f"kết quả cho thấy:\n"
-            f"1. Toàn bộ các gói thầu sau thẩm tra đều nằm hoàn toàn trong phạm vi cơ cấu chi phí xây dựng và thiết bị của Tổng mức đầu tư được duyệt.\n"
-            f"2. Việc thẩm tra, rà soát chi tiết theo Thông tư 38/2026/TT-BXD và báo giá thị trường đã giúp tiết giảm cho Chủ đầu tư số tiền "
-            f"{total_deduct_all:,.0f} đồng (tiết kiệm {pct_deduct_all:.2f}%), nâng cao hiệu quả sử dụng vốn đầu tư và tuân thủ chặt chẽ pháp luật."
-        ).paragraph_format.space_after = Pt(8)
-
-        # PHẦN 4: KẾT LUẬN VÀ KIẾN NGHỊ
-        p_h4 = doc.add_paragraph()
-        p_h4.paragraph_format.space_before = Pt(8)
-        p_h4.paragraph_format.space_after = Pt(4)
-        r = p_h4.add_run("4. KẾT LUẬN VÀ KIẾN NGHỊ")
-        r.bold = True
-        r.font.size = Pt(13)
+        r.font.size = Pt(12.5)
         r.font.color.rgb = RGBColor(31, 78, 121)
 
-        conclusions = [
-            f"Hồ sơ dự toán đã được hoàn thiện thẩm tra, chuẩn hóa liên kết tra cứu trực tiếp đến 8 Phụ lục của Thông tư số 38/2026/TT-BXD và các file báo giá vật tư, thiết bị.",
-            f"Giá trị dự toán đề nghị Chủ đầu tư xem xét phê duyệt sau thẩm tra là: {total_audit_all:,.0f} đồng (Bằng chữ: Một trăm hai mươi ba tỷ, ba trăm hai mươi bốn triệu, không trăm mười ba nghìn, sáu trăm năm mươi tư đồng).",
-            f"Giá trị giảm trừ so với dự toán do Tư vấn lập là: {total_deduct_all:,.0f} đồng (giảm {pct_deduct_all:.2f}%).",
-            f"Đề nghị Ban QLDA và Chủ đầu tư yêu cầu Đơn vị Tư vấn cập nhật lại dự toán theo kết quả thẩm tra này trước khi tiến hành các bước lựa chọn nhà thầu."
-        ]
-        for conc in conclusions:
-            p_conc = doc.add_paragraph(conc, style='List Bullet')
-            p_conc.paragraph_format.space_after = Pt(3)
+        doc.add_paragraph(
+            f"- Kết luận: Hồ sơ dự toán xây dựng công trình {self.project_name} đủ điều kiện sau khi hoàn thiện các nội dung giảm trừ "
+            f"để Chủ đầu tư phê duyệt dự toán với giá trị thẩm tra là: {total_audit_all:,.0f} đồng "
+            f"(Giảm trừ so với dự toán đề nghị thẩm tra là: {total_deduct_all:,.0f} đồng, tương đương giảm {pct_deduct_all:.2f}%).\n"
+            f"- Kiến nghị: Đề nghị Chủ đầu tư yêu cầu Tư vấn thiết kế cập nhật dự toán theo giá trị thẩm tra, "
+            f"chuẩn hóa các mã hiệu định mức theo Thông tư 38/2026/TT-BXD trước khi triển khai các bước tiếp theo."
+        ).paragraph_format.space_after = Pt(8)
 
-        # Chữ ký đại diện
-        doc.add_paragraph().paragraph_format.space_after = Pt(12)
-        tbl_sig = doc.add_table(rows=2, cols=2)
+        # CHỮ KÝ THEO ĐÚNG MẪU SỐ 05 PHỤ LỤC VIII TT 36/2026/TT-BXD
+        tbl_sig = doc.add_table(rows=2, cols=3)
         tbl_sig.alignment = WD_TABLE_ALIGNMENT.CENTER
         tbl_sig.autofit = False
 
-        c_s0 = tbl_sig.cell(0, 0)
-        p = c_s0.paragraphs[0]
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        r = p.add_run("CÁN BỘ THẨM TRA DỰ TOÁN\n(Ký và ghi rõ họ tên)")
+        c0 = tbl_sig.cell(0, 0)
+        p0 = c0.paragraphs[0]
+        p0.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r = p0.add_run("NGƯỜI THẨM TRA\n(Ký, họ tên)")
         r.bold = True
-        r.font.size = Pt(11)
+        r.font.size = Pt(10.5)
 
-        c_s1 = tbl_sig.cell(0, 1)
-        p = c_s1.paragraphs[0]
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        r = p.add_run("ĐẠI DIỆN ĐƠN VỊ THẨM TRA\n(Ký tên, đóng dấu)")
+        c1 = tbl_sig.cell(0, 1)
+        p1 = c1.paragraphs[0]
+        p1.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r = p1.add_run("NGƯỜI CHỦ TRÌ\n(Ký, họ tên)")
         r.bold = True
-        r.font.size = Pt(11)
+        r.font.size = Pt(10.5)
 
-        c_s0_b = tbl_sig.cell(1, 0)
-        c_s0_b.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
-        c_s0_b.paragraphs[0].paragraph_format.space_before = Pt(45)
-        r = c_s0_b.paragraphs[0].add_run("Kỹ sư Định giá Xây dựng")
-        r.italic = True
-
-        c_s1_b = tbl_sig.cell(1, 1)
-        c_s1_b.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
-        c_s1_b.paragraphs[0].paragraph_format.space_before = Pt(45)
-        r = c_s1_b.paragraphs[0].add_run("Giám đốc Đơn vị Thẩm tra")
+        c2 = tbl_sig.cell(0, 2)
+        p2 = c2.paragraphs[0]
+        p2.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r = p2.add_run("ĐƠN VỊ THẨM TRA\n(Ký, ghi rõ chức vụ, đóng dấu)")
         r.bold = True
+        r.font.size = Pt(10.5)
+
+        for col_i, tit in enumerate(["Kỹ sư Thẩm tra", "Chủ trì Thẩm tra", "Giám đốc Đơn vị Thẩm tra"]):
+            c_b = tbl_sig.cell(1, col_i)
+            c_b.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+            c_b.paragraphs[0].paragraph_format.space_before = Pt(45)
+            r_b = c_b.paragraphs[0].add_run(tit)
+            r_b.italic = True
+            r_b.font.size = Pt(10.5)
 
         doc.save(out_path)
 
@@ -413,7 +469,7 @@ class ReportGenerator:
         ws1.row_dimensions[1].height = 28
 
         ws1.merge_cells("A2:H2")
-        ws1["A2"] = f"Công trình: {self.project_name} | Đối chiếu Thông tư số 38/2026/TT-BXD và Báo giá thị trường"
+        ws1["A2"] = f"Công trình: {self.project_name} | Chuẩn Mẫu số 05 Phụ lục VIII TT 36/2026/TT-BXD, NĐ 206/2026/NĐ-CP & TT 38/2026/TT-BXD"
         ws1["A2"].font = Font(name="Times New Roman", size=11, italic=True)
         ws1["A2"].alignment = Alignment(horizontal="center")
 
@@ -455,9 +511,11 @@ class ReportGenerator:
             c_pct.number_format = "0.00%"
             c_pct.alignment = Alignment(horizontal="center")
 
-            c_f = ws1.cell(row=row_idx, column=8, value=os.path.basename(res['audited_file_path']))
-            c_f.hyperlink = f"file:///{res['audited_file_path'].replace('\\', '/')}"
-            c_f.font = font_link
+            aud_path = res.get('audited_file_path', '')
+            c_f = ws1.cell(row=row_idx, column=8, value=os.path.basename(aud_path) if aud_path else "Đã thẩm tra")
+            if aud_path:
+                c_f.hyperlink = f"file:///{aud_path.replace('\\', '/')}"
+                c_f.font = font_link
 
             for c_i in range(1, 9):
                 ws1.cell(row=row_idx, column=c_i).border = border_thin

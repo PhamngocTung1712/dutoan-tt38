@@ -1,0 +1,16 @@
+================================================================================
+   THONG TIN DUONG LINK TRUY CAP HE THONG THAM TRA DU TOAN
+================================================================================
+
+1. DUONG LINK ONLINE CHO CAC MAY KHAC / DIEN THOAI (TRUY CAP TU XA TOAN CAU):
+   👉 https://scenario-hanging-screenshot-badge.trycloudflare.com
+   (Chi can gui link nay qua Zalo/Email la may khac vao duoc ngay)
+
+2. DUONG LINK NOI BO CHO CAC MAY CUNG WI-FI / MANG LAN CONG TY:
+   👉 http://192.168.2.8:5000
+
+3. DUONG LINK MANG NOI BO TREN MAY NAY:
+   👉 http://localhost:5000
+
+Luu y: Vui long giu cua so den dang chay de duy tri ket noi online!
+================================================================================

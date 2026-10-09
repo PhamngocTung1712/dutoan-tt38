@@ -1,0 +1,7 @@
+# Requirements cho triển khai Cloud (Render, Railway, Hugging Face Spaces)
+flask>=3.0.0
+python-calamine>=0.2.0
+openpyxl>=3.1.2
+python-docx>=1.1.0
+gunicorn>=21.2.0
+werkzeug>=3.0.0

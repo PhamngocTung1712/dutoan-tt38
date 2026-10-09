@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Đang mở Thông tư 38...</title>
+    <script>
+        window.onload = function() {
+            // Lấy tham số url
+            const params = new URLSearchParams(window.location.search);
+            const pdf = params.get('pdf');
+            const page = params.get('page') || 1;
+            
+            // Map tên pdf
+            const pdfMap = {
+                'pl1': '38.2026.tt-bxd-pl1dmdtkhaosat_signed1.pdf',
+                'pl2': '38.2026.tt-bxd-pl2dmdtxaydung_signed1.pdf',
+                'pl3': '38.2026.tt-bxd-pl3dmdtlapdathtkt_signed1.pdf',
+                'pl4': '38.2026.tt-bxd-pl4dmdtldthietbi_signed1.pdf',
+                'pl5': '38.2026.tt-bxd-pl5dmdtthinghiem_signed1.pdf',
+                'pl6': '38.2026.tt-bxd-pl6dmdtsuachua_signed1.pdf',
+                'pl7': '38.2026.tt-bxd-pl7dmdtvatlieu_signed1.pdf',
+                'pl8': '38.2026.tt-bxd-pl8dmqldavatvxd_signed1.pdf'
+            };
+            
+            let filename = pdfMap[pdf] || pdf;
+            if (filename) {
+                // Đường dẫn tương đối đến thư mục TT 38/TT 38
+                let targetUrl = "TT 38/TT 38/" + filename + "#page=" + page;
+                document.getElementById('msg').innerHTML = "Đang chuyển đến <b>" + filename + "</b> trang <b>" + page + "</b>...";
+                window.location.replace(targetUrl);
+            } else {
+                document.getElementById('msg').innerText = "Không tìm thấy tệp PDF được yêu cầu.";
+            }
+        };
+    </script>
+</head>
+<body style="font-family: Arial, sans-serif; text-align: center; padding-top: 50px;">
+    <h2>BỘ TRA CỨU ĐỊNH MỨC THÔNG TƯ 38/2026/TT-BXD</h2>
+    <p id="msg">Đang xử lý chuyển trang...</p>
+</body>
+</html>

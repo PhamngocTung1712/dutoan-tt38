@@ -1,7 +1,7 @@
 services:
   - type: web
     name: dutoan-thamtra-tt38
-    env: python
+    runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn --bind 0.0.0.0:$PORT --workers 2 --timeout 120 app_web:app
     plan: free

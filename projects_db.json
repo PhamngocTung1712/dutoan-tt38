@@ -4,9 +4,9 @@
     "no1_cau_giay": {
       "id": "no1_cau_giay",
       "name": "DỰ ÁN NO1 CẦU GIẤY (NHÀ Ở CBCS CAND)",
-      "dutoan_dir": "D:\\Cong ty\\DuToanChuyenNghiep\\05.4.2_L1",
-      "baogia_dir": "D:\\Cong ty\\DuToanChuyenNghiep\\Bao_Gia_Dau_Vao",
-      "output_dir": "D:\\Cong ty\\DuToanChuyenNghiep\\Output_Tham_Tra_Du_Toan",
+      "dutoan_dir": "05.4.2_L1",
+      "baogia_dir": "Bao_Gia_Dau_Vao",
+      "output_dir": "Output_Tham_Tra_Du_Toan",
       "tmdt": 1395500000000.0,
       "created_at": "2026-10-09 14:00",
       "status": "Đã thẩm tra"

@@ -52,33 +52,55 @@ PDF_MAP = {
     8: os.path.join(TT38_DIR, "38.2026.tt-bxd-pl8dmqldavatvxd_signed1.pdf")
 }
 
+def resolve_dir(path):
+    if not path:
+        return ""
+    if os.path.isabs(path) and os.path.exists(path):
+        return path
+    clean = path.replace('\\', '/').rstrip('/')
+    bname = os.path.basename(clean)
+    candidate = os.path.join(BASE_DIR, bname)
+    if os.path.exists(candidate):
+        return candidate
+    candidate2 = os.path.join(BASE_DIR, clean)
+    if os.path.exists(candidate2):
+        return candidate2
+    return os.path.abspath(os.path.join(BASE_DIR, path))
+
 # Quản lý Database Dự án
 def load_db():
+    data = None
     if os.path.exists(DB_FILE):
         try:
             with open(DB_FILE, 'r', encoding='utf-8') as f:
-                return json.load(f)
+                data = json.load(f)
         except Exception:
             pass
 
-    # Mặc định dự án mẫu NO1 Cầu Giấy
-    default_db = {
-        "active_id": "no1_cau_giay",
-        "projects": {
-            "no1_cau_giay": {
-                "id": "no1_cau_giay",
-                "name": "DỰ ÁN NO1 CẦU GIẤY (NHÀ Ở CBCS CAND)",
-                "dutoan_dir": os.path.join(BASE_DIR, "05.4.2_L1"),
-                "baogia_dir": os.path.join(BASE_DIR, "Bao_Gia_Dau_Vao"),
-                "output_dir": os.path.join(BASE_DIR, "Output_Tham_Tra_Du_Toan"),
-                "tmdt": 1395500000000.0,
-                "created_at": "2026-10-09 14:00",
-                "status": "Đã thẩm tra"
+    if not data or not data.get("projects"):
+        data = {
+            "active_id": "no1_cau_giay",
+            "projects": {
+                "no1_cau_giay": {
+                    "id": "no1_cau_giay",
+                    "name": "DỰ ÁN NO1 CẦU GIẤY (NHÀ Ở CBCS CAND)",
+                    "dutoan_dir": "05.4.2_L1",
+                    "baogia_dir": "Bao_Gia_Dau_Vao",
+                    "output_dir": "Output_Tham_Tra_Du_Toan",
+                    "tmdt": 1395500000000.0,
+                    "created_at": "2026-10-09 14:00",
+                    "status": "Đã thẩm tra"
+                }
             }
         }
-    }
-    save_db(default_db)
-    return default_db
+        save_db(data)
+
+    for pid, p in data.get("projects", {}).items():
+        for k in ["dutoan_dir", "baogia_dir", "output_dir"]:
+            if k in p:
+                p[k] = resolve_dir(p[k])
+
+    return data
 
 def save_db(data):
     with open(DB_FILE, 'w', encoding='utf-8') as f:

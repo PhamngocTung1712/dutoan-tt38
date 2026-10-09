@@ -164,6 +164,11 @@ HTML_PAGE = """
                 </select>
             </div>
 
+            <!-- NÚT TẢI THÊM FILE -->
+            <button class="btn btn-info text-white fw-bold me-2" onclick="openUploadModal()">
+                <i class="fa-solid fa-cloud-arrow-up me-1"></i>Tải Thêm File
+            </button>
+
             <!-- NÚT THÊM DỰ ÁN MỚI -->
             <button class="btn btn-warning text-dark fw-bold me-2" data-bs-toggle="modal" data-bs-target="#modalNewProject">
                 <i class="fa-solid fa-plus-circle me-1"></i>Thêm Dự Án Mới
@@ -439,35 +444,69 @@ HTML_PAGE = """
                 <hr>
                 <h6 class="fw-bold text-primary mb-3">3. Chọn Cách Đưa Dữ Liệu Vào Hệ Thống:</h6>
 
-                <!-- CÁCH 1: NHẬP ĐƯỜNG DẪN THƯ MỤC TRÊN MÁY TÍNH -->
-                <div class="card p-3 mb-3 bg-light">
-                    <h6 class="fw-bold mb-2"><i class="fa-regular fa-folder-closed me-2"></i>Cách A: Nhập đường dẫn thư mục có sẵn trên máy tính (Khuyên dùng)</h6>
+                <!-- CÁCH 1: TẢI FILE TRỰC TIẾP TỪ TRÌNH DUYỆT (CHÍNH) -->
+                <div class="card p-3 mb-3 border-primary bg-light shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-bold text-primary mb-0"><i class="fa-solid fa-cloud-arrow-up me-2"></i>Cách A: Tải file từ máy tính của bạn (Bắt buộc khi dùng Web Online)</h6>
+                        <span class="badge bg-primary">Khuyên dùng</span>
+                    </div>
                     <div class="mb-2">
-                        <label class="form-label small text-muted">Đường dẫn thư mục chứa file Excel Dự toán (.xls, .xlsx):</label>
-                        <input type="text" id="newProjDutoanPath" class="form-control form-control-sm" placeholder="Ví dụ: D:\\DuAn_Moi\\DuToan">
+                        <label class="form-label small fw-bold text-dark">Chọn các file Excel Dự toán (.xls, .xlsx) * :</label>
+                        <input type="file" id="uploadDutoanFiles" class="form-control form-control-sm" multiple accept=".xls,.xlsx">
+                        <small class="text-muted">Có thể giữ Ctrl để chọn cùng lúc nhiều file.</small>
                     </div>
                     <div>
-                        <label class="form-label small text-muted">Đường dẫn thư mục chứa file Báo giá vật tư/thiết bị (.xlsx, .xls):</label>
-                        <input type="text" id="newProjBaogiaPath" class="form-control form-control-sm" placeholder="Ví dụ: D:\\DuAn_Moi\\BaoGia">
+                        <label class="form-label small fw-bold text-dark">Chọn các file Báo giá vật tư/thiết bị đối chứng (.xlsx, .xls):</label>
+                        <input type="file" id="uploadBaogiaFiles" class="form-control form-control-sm" multiple accept=".xls,.xlsx">
                     </div>
                 </div>
 
-                <!-- CÁCH 2: TẢI FILE TRỰC TIẾP LÊN -->
-                <div class="card p-3 bg-light">
-                    <h6 class="fw-bold mb-2"><i class="fa-solid fa-cloud-arrow-up me-2"></i>Cách B: Hoặc tải file trực tiếp từ trình duyệt</h6>
+                <!-- CÁCH 2: NHẬP ĐƯỜNG DẪN THƯ MỤC TRÊN MÁY TÍNH -->
+                <div class="card p-3 bg-light text-muted">
+                    <h6 class="fw-bold mb-2 text-secondary"><i class="fa-regular fa-folder-closed me-2"></i>Cách B: Nhập đường dẫn thư mục có sẵn (Chỉ khi chạy Offline trên PC)</h6>
                     <div class="mb-2">
-                        <label class="form-label small text-muted">Chọn các file Excel Dự toán (.xls, .xlsx):</label>
-                        <input type="file" id="uploadDutoanFiles" class="form-control form-control-sm" multiple accept=".xls,.xlsx">
+                        <label class="form-label small text-muted">Đường dẫn thư mục chứa file Excel Dự toán:</label>
+                        <input type="text" id="newProjDutoanPath" class="form-control form-control-sm" placeholder="Ví dụ: D:\\DuAn_Moi\\DuToan">
                     </div>
                     <div>
-                        <label class="form-label small text-muted">Chọn các file Báo giá vật tư/thiết bị (.xlsx, .xls):</label>
-                        <input type="file" id="uploadBaogiaFiles" class="form-control form-control-sm" multiple accept=".xls,.xlsx">
+                        <label class="form-label small text-muted">Đường dẫn thư mục chứa file Báo giá:</label>
+                        <input type="text" id="newProjBaogiaPath" class="form-control form-control-sm" placeholder="Ví dụ: D:\\DuAn_Moi\\BaoGia">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                 <button type="button" class="btn btn-primary" onclick="submitCreateProject()"><i class="fa-solid fa-check me-1"></i>Tạo Dự Án & Thẩm Tra Ngay</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TẢI THÊM FILE -->
+<div class="modal fade" id="modalUploadFiles" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title"><i class="fa-solid fa-cloud-arrow-up me-2"></i>Tải Thêm File Cho Dự Án</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info py-2 small mb-3">
+                    Đang tải file cho dự án: <strong id="uploadModalProjName">...</strong>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold"><i class="fa-solid fa-file-excel text-success me-1"></i>Chọn file Excel Dự toán (.xlsx, .xls) * :</label>
+                    <input type="file" id="modalDtFiles" class="form-control" multiple accept=".xls,.xlsx">
+                    <small class="text-muted">Có thể giữ Ctrl để chọn cùng lúc nhiều file gói thầu.</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold"><i class="fa-solid fa-tags text-primary me-1"></i>Chọn file Báo giá vật tư/thiết bị (tùy chọn):</label>
+                    <input type="file" id="modalBgFiles" class="form-control" multiple accept=".xls,.xlsx">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="submitModalUpload()"><i class="fa-solid fa-upload me-1"></i>Tải Lên & Thẩm Tra Ngay</button>
             </div>
         </div>
     </div>
@@ -550,7 +589,28 @@ HTML_PAGE = """
     function renderPackagesTable(pkgs) {
         const tbody = document.getElementById('tblPackageBody');
         if (!pkgs || pkgs.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">Chưa có kết quả thẩm tra cho dự án này. Hãy bấm nút "Thẩm Tra Dự Án Này"!</td></tr>';
+            tbody.innerHTML = `<tr><td colspan="7" class="p-0 border-0">
+                <div class="card border-warning my-3 text-center p-4 bg-light shadow-sm">
+                    <div class="text-warning mb-2"><i class="fa-solid fa-cloud-arrow-up fa-3x"></i></div>
+                    <h5 class="fw-bold text-dark mb-1">Dự án này chưa có file Excel dự toán để thẩm tra!</h5>
+                    <p class="text-muted small mb-3">Vì hệ thống đang chạy Online 24/7 trên Cloud, anh vui lòng chọn các file Excel từ máy tính của mình để tải lên hệ thống.</p>
+                    <div class="row justify-content-center g-3 mb-3">
+                        <div class="col-md-5 text-start">
+                            <label class="form-label small fw-bold text-dark"><i class="fa-solid fa-file-excel text-success me-1"></i>1. Chọn file Excel Dự toán (.xlsx, .xls) * :</label>
+                            <input type="file" id="inlineDtFiles" class="form-control form-control-sm" multiple accept=".xls,.xlsx">
+                        </div>
+                        <div class="col-md-5 text-start">
+                            <label class="form-label small fw-bold text-dark"><i class="fa-solid fa-tags text-primary me-1"></i>2. Chọn file Báo giá vật tư/thiết bị (tùy chọn):</label>
+                            <input type="file" id="inlineBgFiles" class="form-control form-control-sm" multiple accept=".xls,.xlsx">
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary px-4 fw-bold shadow-sm" onclick="uploadInlineFiles()">
+                            <i class="fa-solid fa-upload me-1"></i> Tải File Lên & Thẩm Tra Ngay
+                        </button>
+                    </div>
+                </div>
+            </td></tr>`;
             return;
         }
         let html = '';
@@ -673,6 +733,106 @@ HTML_PAGE = """
             });
     }
 
+    function openUploadModal() {
+        document.getElementById('uploadModalProjName').innerText = document.getElementById('curProjectName').innerText;
+        const modal = new bootstrap.Modal(document.getElementById('modalUploadFiles'));
+        modal.show();
+    }
+
+    function submitModalUpload() {
+        const dtFiles = document.getElementById('modalDtFiles').files;
+        const bgFiles = document.getElementById('modalBgFiles').files;
+
+        if (dtFiles.length === 0 && bgFiles.length === 0) {
+            alert('Vui lòng chọn ít nhất 1 file Excel Dự toán (.xlsx, .xls) để tải lên!');
+            return;
+        }
+
+        const formData = new FormData();
+        for (let i = 0; i < dtFiles.length; i++) formData.append('dutoan_files', dtFiles[i]);
+        for (let i = 0; i < bgFiles.length; i++) formData.append('baogia_files', bgFiles[i]);
+
+        const modalEl = document.getElementById('modalUploadFiles');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+
+        const btn = document.getElementById('btnRunAudit');
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i>Đang Tải File & Thẩm Tra...';
+        btn.disabled = true;
+
+        fetch(`/api/projects/${activeProjectId}/upload`, { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    return fetch(`/api/projects/${activeProjectId}/run`, { method: 'POST' });
+                } else {
+                    throw new Error(data.error);
+                }
+            })
+            .then(res => res.json())
+            .then(auditData => {
+                btn.innerHTML = '<i class="fa-solid fa-play me-1"></i>Thẩm Tra Dự Án Này';
+                btn.disabled = false;
+                if (auditData.success) {
+                    alert(`✓ Đã tải file và hoàn tất thẩm tra thành công (${auditData.audited_count} gói thầu)!`);
+                    loadProjectDetails(activeProjectId);
+                } else {
+                    alert('Lỗi thẩm tra: ' + auditData.error);
+                }
+            })
+            .catch(err => {
+                btn.innerHTML = '<i class="fa-solid fa-play me-1"></i>Thẩm Tra Dự Án Này';
+                btn.disabled = false;
+                alert('Lỗi: ' + err.message);
+            });
+    }
+
+    function uploadInlineFiles() {
+        const dtFiles = document.getElementById('inlineDtFiles').files;
+        const bgFiles = document.getElementById('inlineBgFiles').files;
+
+        if (dtFiles.length === 0) {
+            alert('Vui lòng chọn ít nhất 1 file Excel Dự toán (.xlsx, .xls)!');
+            return;
+        }
+
+        const formData = new FormData();
+        for (let i = 0; i < dtFiles.length; i++) formData.append('dutoan_files', dtFiles[i]);
+        if (bgFiles) {
+            for (let i = 0; i < bgFiles.length; i++) formData.append('baogia_files', bgFiles[i]);
+        }
+
+        const btn = document.getElementById('btnRunAudit');
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i>Đang Tải File & Thẩm Tra...';
+        btn.disabled = true;
+
+        fetch(`/api/projects/${activeProjectId}/upload`, { method: 'POST', body: formData })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    return fetch(`/api/projects/${activeProjectId}/run`, { method: 'POST' });
+                } else {
+                    throw new Error(data.error);
+                }
+            })
+            .then(res => res.json())
+            .then(auditData => {
+                btn.innerHTML = '<i class="fa-solid fa-play me-1"></i>Thẩm Tra Dự Án Này';
+                btn.disabled = false;
+                if (auditData.success) {
+                    alert(`✓ Đã tải file và hoàn tất thẩm tra thành công (${auditData.audited_count} gói thầu)!`);
+                    loadProjectDetails(activeProjectId);
+                } else {
+                    alert('Lỗi thẩm tra: ' + auditData.error);
+                }
+            })
+            .catch(err => {
+                btn.innerHTML = '<i class="fa-solid fa-play me-1"></i>Thẩm Tra Dự Án Này';
+                btn.disabled = false;
+                alert('Lỗi: ' + err.message);
+            });
+    }
+
     function submitCreateProject() {
         const name = document.getElementById('newProjName').value.trim();
         if (!name) {
@@ -680,8 +840,14 @@ HTML_PAGE = """
             return;
         }
 
-        const tmdt = document.getElementById('newProjTmdt').value;
+        const dutoanFiles = document.getElementById('uploadDutoanFiles').files;
         const dutoanPath = document.getElementById('newProjDutoanPath').value.trim();
+        if (dutoanFiles.length === 0 && !dutoanPath) {
+            alert('LƯU Ý: Vui lòng chọn ít nhất 1 file Excel Dự toán (.xlsx, .xls) ở Cách A để tải lên hệ thống!');
+            return;
+        }
+
+        const tmdt = document.getElementById('newProjTmdt').value;
         const baogiaPath = document.getElementById('newProjBaogiaPath').value.trim();
 
         const formData = new FormData();
@@ -690,7 +856,6 @@ HTML_PAGE = """
         formData.append('dutoan_path', dutoanPath);
         formData.append('baogia_path', baogiaPath);
 
-        const dutoanFiles = document.getElementById('uploadDutoanFiles').files;
         for (let i = 0; i < dutoanFiles.length; i++) {
             formData.append('dutoan_files', dutoanFiles[i]);
         }
@@ -708,6 +873,8 @@ HTML_PAGE = """
                     modal.hide();
                     loadProjectsList();
                     alert(`✓ Đã tạo thành công dự án: ${name}!`);
+                    // Tự động chạy thẩm tra luôn
+                    runAuditCurrentProject();
                 } else {
                     alert('Lỗi tạo dự án: ' + data.error);
                 }
@@ -846,6 +1013,43 @@ def api_create_project():
 
     return jsonify({"success": True, "project_id": proj_id})
 
+@app.route('/api/projects/<proj_id>/upload', methods=['POST'])
+def api_upload_project_files(proj_id):
+    db = load_db()
+    p = db["projects"].get(proj_id)
+    if not p:
+        return jsonify({"success": False, "error": "Không tìm thấy dự án"}), 404
+
+    dutoan_dir = p["dutoan_dir"]
+    baogia_dir = p["baogia_dir"]
+    os.makedirs(dutoan_dir, exist_ok=True)
+    os.makedirs(baogia_dir, exist_ok=True)
+
+    dt_count = 0
+    if 'dutoan_files' in request.files:
+        for f in request.files.getlist('dutoan_files'):
+            if f and f.filename:
+                safe_name = secure_filename(f.filename) or f.filename
+                if not safe_name.lower().endswith(('.xls', '.xlsx')):
+                    safe_name += '.xlsx'
+                f.save(os.path.join(dutoan_dir, safe_name))
+                dt_count += 1
+
+    bg_count = 0
+    if 'baogia_files' in request.files:
+        for f in request.files.getlist('baogia_files'):
+            if f and f.filename:
+                safe_name = secure_filename(f.filename) or f.filename
+                if not safe_name.lower().endswith(('.xls', '.xlsx')):
+                    safe_name += '.xlsx'
+                f.save(os.path.join(baogia_dir, safe_name))
+                bg_count += 1
+
+    if dt_count == 0 and bg_count == 0:
+        return jsonify({"success": False, "error": "Chưa chọn file nào để tải lên"}), 400
+
+    return jsonify({"success": True, "dt_uploaded": dt_count, "bg_uploaded": bg_count})
+
 @app.route('/api/projects/<proj_id>/run', methods=['POST'])
 def api_run_project_audit(proj_id):
     db = load_db()
@@ -860,6 +1064,16 @@ def api_run_project_audit(proj_id):
     if not os.path.exists(dutoan_dir):
         return jsonify({"success": False, "error": f"Thư mục dự toán không tồn tại: {dutoan_dir}"}), 400
 
+    excel_files = [fname for fname in os.listdir(dutoan_dir)
+                   if (fname.lower().endswith('.xls') or fname.lower().endswith('.xlsx'))
+                   and not fname.startswith('~$') and '_Linked' not in fname and '_Audited' not in fname]
+
+    if not excel_files:
+        return jsonify({
+            "success": False,
+            "error": "Dự án này chưa có file Excel dự toán nào (.xls, .xlsx)! Vui lòng bấm nút 'Tải Thêm File' để chọn file từ máy tính tải lên."
+        }), 400
+
     try:
         # 1. Nạp báo giá riêng của dự án này
         q_idx = QuotationIndexer(baogia_dir)
@@ -872,13 +1086,10 @@ def api_run_project_audit(proj_id):
         os.makedirs(dir_reports, exist_ok=True)
 
         results = []
-        for fname in os.listdir(dutoan_dir):
-            if fname.startswith('~$') or '_Linked' in fname or '_Audited' in fname:
-                continue
-            if fname.lower().endswith('.xls') or fname.lower().endswith('.xlsx'):
-                fpath = os.path.join(dutoan_dir, fname)
-                res = engine.audit_file(fpath, dir_audited)
-                results.append(res)
+        for fname in excel_files:
+            fpath = os.path.join(dutoan_dir, fname)
+            res = engine.audit_file(fpath, dir_audited)
+            results.append(res)
 
         # 3. Xuất Báo cáo Word & Excel tổng hợp
         rep_gen = ReportGenerator(project_name=p["name"])
@@ -913,13 +1124,14 @@ def api_get_project_results(proj_id):
     total_ded = 0.0
 
     if os.path.exists(dutoan_dir):
-        q_idx = QuotationIndexer(baogia_dir)
-        engine = AuditEngine(INDEX_PATH, q_idx)
+        excel_files = [fname for fname in os.listdir(dutoan_dir)
+                       if (fname.lower().endswith('.xls') or fname.lower().endswith('.xlsx'))
+                       and not fname.startswith('~$') and '_Linked' not in fname and '_Audited' not in fname]
+        if excel_files:
+            q_idx = QuotationIndexer(baogia_dir)
+            engine = AuditEngine(INDEX_PATH, q_idx)
 
-        for fname in os.listdir(dutoan_dir):
-            if fname.startswith('~$') or '_Linked' in fname or '_Audited' in fname:
-                continue
-            if fname.lower().endswith('.xls') or fname.lower().endswith('.xlsx'):
+            for fname in excel_files:
                 fpath = os.path.join(dutoan_dir, fname)
                 try:
                     res = engine.audit_file(fpath, dir_audited)
